@@ -1,59 +1,23 @@
+-- DB Verification
 SHOW DATABASES;
 
--- Creación de la DB
-CREATE DATABASE red_social;
+-- DB creation
+CREATE DATABASE social_network;
 
--- Utilizacion de la DB actual
-USE red_social;
+-- Use of the current DB
+USE social_network;
 
--- Verificacion de las tablas en la DB
+-- Verification of tables in the DB
 SHOW TABLES;
 
--- Creación de la tabla usuarios
-CREATE TABLE usuarios (
-	id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-	nombre_usuario VARCHAR(30) NOT NULL UNIQUE,
-	nombre VARCHAR(50) NOT NULL,
-	apellidos VARCHAR(55) NOT NULL,
-	es_administrador TINYINT(1) DEFAULT 0,
-	fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-	email VARCHAR(45) UNIQUE NOT NULL,
-	password VARCHAR(255) NOT NULL,
-	avatar VARCHAR(255),
-	bio VARCHAR(150) DEFAULT "Sin biografía",
-	genero ENUM ("Masculino", "Femenino", "Prefiero no especificar", "No binario", "Otro"),
-	cumpleanos DATE,
-	id_pais INT,
-	FOREIGN KEY (id_pais) REFERENCES paises(id_pais)
+-- Creating the countries table
+CREATE TABLE countries (
+	id_country INT AUTO_INCREMENT PRIMARY KEY,
+	country_name VARCHAR(45) NOT NULL
 );
 
--- Insertar datos de prueba en usuarios
-INSERT INTO usuarios (nombre_usuario, nombre, apellidos, es_administrador, fecha_registro, email, password, avatar,
-	bio, genero, cumpleanos, id_pais)
-	VALUES
-	("usuario_administrador", "nombredeprueba" , "apellidodeprueba", 1, "2022-07-18 08:23:45", "administrador35771@correo.com", "admin25229100117575701", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
-	"Hola, mundo!", "Masculino", "2001-04-24", 1),
-	("usuario_prueba1", "nombredeprueba" , "apellidodeprueba", 0, "2022-05-10 04:21:55", "usuario241@correo.com", "prueba2514144418", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
-	"Sin bio por el momento", "Femenino", "2011-05-22", 2),
-	("usuario_prueba2", "nombredeprueba" , "apellidodeprueba", 0, "2022-02-11 03:00:00", "usuario752@correo.com", "prueba21213554342", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
-	"Nuevo aquí!", "No binario", "2002-04-22", 10),
-	("usuario_prueba3", "nombredeprueba" , "apellidodeprueba", 0, "2022-01-14 04:20:00", "usuario673@correo.com", "prueba200277227910", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
-	"Saludos!", "Otro", "2000-01-11", 4),
-	("usuario_prueba4", "nombredeprueba" , "apellidodeprueba", 0, "2022-04-17 03:21:10", "usuario4874@correo.com", "prueba00118577575465", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
-	"Un gusto!", "Prefiero no especificar", "2001-04-24", 1);
-
--- Verificación de los datos de prueba en usuarios
-SELECT *
-FROM usuarios;
-
--- Creación de la tabla paises
-CREATE TABLE paises (
-	id_pais INT AUTO_INCREMENT PRIMARY KEY,
-	nombre_pais VARCHAR(45) NOT NULL
-);
-
--- Insertar datos de prueba en paises
-INSERT INTO paises (nombre_pais) 
+-- Insert test data into countries
+INSERT INTO countries (country_name) 
 	VALUES
 	("Argentina"),
 	("Australia"),
@@ -88,22 +52,59 @@ INSERT INTO paises (nombre_pais)
 	("Reino Unido"),
 	("Vietnam");
 
--- Verificación de los datos de prueba en paises
+-- Verification of test data in countries
 SELECT *
-FROM paises;
+FROM countries;
 
--- Creación de la tabla seguidores
-CREATE TABLE seguidores (
-	id_seguidor INT AUTO_INCREMENT PRIMARY KEY,
-	fecha_seguimiento DATETIME DEFAULT CURRENT_TIMESTAMP,
-	id_usuario_seguidor INT, 
-	id_usuario_seguido INT,
-	FOREIGN KEY (id_usuario_seguidor) REFERENCES usuarios(id_usuario),
-	FOREIGN KEY (id_usuario_seguido) REFERENCES usuarios(id_usuario)
+-- Creation of the users table
+CREATE TABLE users (
+	id_user INT AUTO_INCREMENT PRIMARY KEY,
+	username VARCHAR(30) NOT NULL UNIQUE,
+	first_name VARCHAR(50) NOT NULL,
+	last_name VARCHAR(55) NOT NULL,
+	is_administrator TINYINT(1) DEFAULT 0,
+	registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+	email VARCHAR(45) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	avatar VARCHAR(255),
+	bio VARCHAR(150) DEFAULT "No bio",
+	gender ENUM ("Male", "Female", "I prefer not to specify", "Nonbinary", "Other"),
+	birthday  DATE,
+	id_country INT,
+	FOREIGN KEY (id_country) REFERENCES countries(id_country)
 );
 
--- Insertar datos de prueba en seguidores
-INSERT INTO seguidores (fecha_seguimiento, id_usuario_seguidor, id_usuario_seguido)
+-- Insert test data into users
+INSERT INTO users (username, first_name, last_name, is_administrator, registration_date, email, password, avatar,
+	bio, gender, birthday , id_country)
+	VALUES
+	("usuario_administrador", "first_namedeprueba" , "apellidodeprueba", 1, "2022-07-18 08:23:45", "administrador318577@correo.com", "admin252525522910", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
+	"Hola, mundo!", "Male", "2001-04-24", 1),
+	("usuario_prueba1", "first_namedeprueba" , "apellidodeprueba", 0, "2022-05-10 04:21:55", "usuario17827@correo.com", "prueba252524148", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
+	"Sin bio por el momento", "Female", "2011-05-22", 2),
+	("usuario_prueba2", "first_namedeprueba" , "apellidodeprueba", 0, "2022-02-11 03:00:00", "usuario28@correo.com", "prueba214242212", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
+	"Nuevo aquí!", "Nonbinary", "2002-04-22", 10),
+	("usuario_prueba3", "first_namedeprueba" , "apellidodeprueba", 0, "2022-01-14 04:20:00", "usuario363@correo.com", "prueba2002252910", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
+	"Saludos!", "Other", "2000-01-11", 4),
+	("usuario_prueba4", "first_namedeprueba" , "apellidodeprueba", 0, "2022-04-17 03:21:10", "usuario25524@correo.com", "prueba0025255211465", "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1700959317~exp=1700959917~hmac=2611e21dddab6ee5d612b4a62bfc5108b1526c3f58be3878462ac143def5c149",
+	"Un gusto!", "I prefer not to specify", "2001-04-24", 1);
+
+-- Verifying test data in users
+SELECT *
+FROM users;
+
+-- Creation of the followers table
+CREATE TABLE followers (
+	id_follower INT AUTO_INCREMENT PRIMARY KEY,
+	follow_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+	id_user_follower INT, 
+	id_user_followed INT,
+	FOREIGN KEY (id_user_follower) REFERENCES users(id_user),
+	FOREIGN KEY (id_user_followed) REFERENCES users(id_user)
+);
+
+-- Insert test data in followers
+INSERT INTO followers (follow_date, id_user_follower, id_user_followed)
 	VALUES
 	("2023-11-29 14:30:00", 2, 1),
 	("2023-06-22 15:23:00", 3, 1),
@@ -112,26 +113,26 @@ INSERT INTO seguidores (fecha_seguimiento, id_usuario_seguidor, id_usuario_segui
 	("2023-08-22 18:00:00", 2, 3),
 	("2023-05-22 19:01:12", 4, 3);
 
--- Verificación de los datos de prueba en seguidores
+-- Verification of test data in followers
 SELECT *
-FROM seguidores;
+FROM followers;
 
--- Creación de la tabla posts
+-- Creating the posts table
 CREATE TABLE posts (
 	id_post INT AUTO_INCREMENT PRIMARY KEY,
-	id_usuario INT,
-	fecha_pubicacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-	texto TEXT,
-	imagen1_url VARCHAR(255),
-	imagen2_url VARCHAR(255),
-	imagen3_url VARCHAR(255),
-	imagen4_url VARCHAR(255),
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+	id_user INT,
+	post_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+	text TEXT,
+	image1_url VARCHAR(255),
+	image2_url VARCHAR(255),
+	image3_url VARCHAR(255),
+	image4_url VARCHAR(255),
+	FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
 
 
--- Insertar datos de prueba en posts
-INSERT INTO posts (id_usuario, fecha_pubicacion, texto, imagen1_url, imagen2_url, imagen3_url)
+-- Insert test data into posts
+INSERT INTO posts (id_user, post_date, text, image1_url, image2_url, image3_url)
 	VALUES
 	(1, "2023-11-29 14:20:00", "Post 1 de prueba. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
 	Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
@@ -164,22 +165,22 @@ INSERT INTO posts (id_usuario, fecha_pubicacion, texto, imagen1_url, imagen2_url
 	"https://img.freepik.com/free-vector/cute-valentine-s-day-animal-couple_23-2148811376.jpg?w=826&t=st=1701309302~exp=1701309902~hmac=ae43d24853619cc9e7224b8c1519bdfd48a1de5ba8f0b8c229dd6a6990295c55",
 	"https://img.freepik.com/free-photo/young-asian-couple-watching-sunset-near-beach-sweet-couple-happy-relax-enjoy-love-romantic-moment_7861-1718.jpg?w=1380&t=st=1701309381~exp=1701309981~hmac=8977f95ceb5abdf27fb614f7058d60a7a17464caf18dcd2785f577e6f2bdad5d");
 
--- Verificación de los datos de prueba en post
+-- Verification of test data in post
 SELECT *
 FROM posts;
 
--- Creación de la tabla likes
+-- Creation of the likes table
 CREATE TABLE likes(
 	id_like INT AUTO_INCREMENT PRIMARY KEY,
 	id_post INT,
-	id_usuario INT,
-	fecha_like DATETIME DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+	id_user INT,
+	like_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (id_user) REFERENCES users(id_user),
 	FOREIGN KEY (id_post) REFERENCES posts(id_post)
 );
 
--- Insertar datos de prueba en likes
-INSERT INTO likes (id_post, id_usuario, fecha_like)
+-- Insert test data into likes
+INSERT INTO likes (id_post, id_user, like_date)
 	VALUES
 	(1, 2, "2023-11-29 14:20:00"),
 	(1, 3, "2023-11-28 13:20:00"),
@@ -193,25 +194,25 @@ INSERT INTO likes (id_post, id_usuario, fecha_like)
 	(3, 2, "2023-11-24 11:20:00"),
 	(3, 4, "2023-11-26 12:20:00");
 
--- Verificación de los datos de prueba en likes
+-- Verification of test data in likes
 SELECT *
 FROM likes;
 
--- Creación de la tabla comentarios
-CREATE TABLE comentarios(
-	id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+-- Creating the comments table
+CREATE TABLE comments(
+	id_comment INT AUTO_INCREMENT PRIMARY KEY,
 	id_post INT,
-	id_usuario INT,
-	fecha_comentario DATETIME DEFAULT CURRENT_TIMESTAMP,
-	texto TEXT NOT NULL,
-	imagen_url VARCHAR(255),
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+	id_user INT,
+	comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+	text TEXT NOT NULL,
+	image_url VARCHAR(255),
+	FOREIGN KEY (id_user) REFERENCES users(id_user),
 	FOREIGN KEY (id_post) REFERENCES posts(id_post)
 );
 
 
--- Insertar datos de prueba en comentarios
-INSERT INTO comentarios (id_post, id_usuario, fecha_comentario, texto, imagen_url)
+-- Insert test data in comments
+INSERT INTO comments (id_post, id_user, comment_date, text, image_url)
 	VALUES
 	(1, 1, "2022-10-29 15:20:00", "Comentario 1 de prueba. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"https://img.freepik.com/free-photo/night-sky-glows-with-iridescent-deep-space-generative-ai_188544-11285.jpg?w=1380&t=st=1701737505~exp=1701738105~hmac=ccb4563d7e295383bb93424562f54434f56f186f60e8c419327ad583e776976e"),
@@ -231,41 +232,34 @@ INSERT INTO comentarios (id_post, id_usuario, fecha_comentario, texto, imagen_ur
 	"https://as2.ftcdn.net/v2/jpg/06/72/04/95/1000_F_672049577_Q7dCnGgELZOtelXXiGavcnusHvTpC21U.jpg");
 
 
--- Verificación de los datos de prueba en comentarios
+-- Verifying test data in comments
 SELECT *
-FROM comentarios;
-
-INSERT INTO comentarios (id_post, id_usuario, texto)
-VALUES (16, 42 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper ligula eget augue cursus, vitae posuere dolor vestibulum. Pellentesque pretium sem arcu, quis laoreet tellus dignissim sit amet. Phasellus imperdiet malesuada vestibulum. Vestibulum ac ex non enim fringilla venenatis ut ut mi. Curabitur a turpis eu massa aliquam consequat quis sed velit. Suspendisse posuere risus quis purus feugiat vehicula. Sed fringilla tortor mi, eget mollis felis pellentesque sed. Suspendisse aliquet arcu faucibus sapien vulputate placerat.
-
-Nunc sed nulla sem. Phasellus aliquet lobortis mi vel pretium. Nullam vestibulum neque eu pellentesque porttitor. Curabitur vel nulla in ante convallis volutpat eget sollicitudin felis. Praesent metus dolor, malesuada feugiat molestie sit amet, lobortis eu neque. Proin convallis metus interdum, maximus lorem in, convallis lorem. Ut nec mi nibh. Vestibulum eros risus, malesuada malesuada ultricies eget, consequat quis purus. In eget lacus feugiat, feugiat leo ut, auctor mi. Nulla facilisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec congue augue vel dolor dapibus pretium. Curabitur tellus erat, dapibus interdum risus quis, feugiat blandit tellus. Aliquam dapibus arcu eu neque cursus, vel lobortis odio dignissim.
-
-Etiam vitae condimentum felis. Nullam nunc dolor, pretium vitae aliquam non, cursus ut mauris. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin dignissim velit ac nunc congue, eget dictum neque tincidunt. Proin eget neque nec mi euismod elementum a in sapien. Nulla laoreet lorem eget libero sagittis rhoncus. Sed dignissim congue gravida. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi at mi ac mi maximus rutrum et vitae nibh. Fusce non elit velit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi cursus gravida congue. Vivamus ullamcorper nisi leo, vel suscipit velit feugiat nec. Curabitur feugiat quam eget dui elementum imperdiet.")
+FROM comments;
 	
--- Consulta de todos los comentarios de un post
-SELECT c.fecha_comentario, c.id_usuario, c.texto, c.imagen_url
-FROM comentarios AS c
-INNER JOIN posts AS p ON p.id_usuario = c.id_usuario
-WHERE p.id_usuario = 1;
+-- Consultation of all the comments of a post
+SELECT c.comment_date, c.id_user, c.text, c.image_url
+FROM comments AS c
+INNER JOIN posts AS p ON p.id_user = c.id_user
+WHERE p.id_user = 1;
 
--- Consulta de todos los likes de un post
-SELECT l.id_like, l.id_usuario, l.fecha_like 
+-- Check all the likes of a post
+SELECT l.id_like, l.id_user, l.like_date 
 FROM likes AS l
 INNER JOIN posts AS p ON p.id_post = l.id_post 
 WHERE p.id_post = 1;
 
--- Consulta del número total de comentarios y likes de un post utilizando subconsultas
+-- Query the total number of comments and likes of a post using subqueries
 SELECT p.id_post, 
-    (SELECT COUNT(*) FROM comentarios AS c WHERE C.id_post = p.id_post) AS total_comentarios,
+    (SELECT COUNT(*) FROM comments AS c WHERE C.id_post = p.id_post) AS total_comments,
     (SELECT COUNT(*) FROM likes AS l WHERE l.id_post = p.id_post) AS total_likes
 FROM posts AS p
 WHERE p.id_post = 1;
 
--- Consulta del contenido de todos los comentarios y todos los likes de un post
-SELECT fecha_like, id_usuario, id_like, NULL AS columna
+-- Consultation of the content of all the comments and all the likes of a post
+SELECT like_date, id_user, id_like, NULL AS columna
 FROM likes
 WHERE id_post = 2
 UNION ALL
-SELECT fecha_comentario, id_usuario, texto, imagen_url
-FROM comentarios
+SELECT comment_date, id_user, text, image_url
+FROM comments
 WHERE id_post = 2;
